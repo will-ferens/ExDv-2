@@ -62,3 +62,35 @@ let instructors = [{
     title: "Resident",
     numberOfDogs: 1
 }]
+
+const findById = (data, id) => {
+    for (let i = 0; i < data.length; i++){
+        if (data[i].id == id){
+            return data[i]
+        }
+    }
+    return null
+}
+
+const app = express()
+app.use(cors())
+
+app.get("/",  (req, res) => {
+    res.json({data: instructors})
+})
+
+app.get("/:id",  (req, res) => {
+    let record = findById(instructors, req.params.id)
+    if (!record){
+        res.status = 404;
+        res.json({
+            error: {
+                message: "No record found!"
+            }
+        })
+    }
+
+    res.json({data: record})
+})
+
+app.listen(process.env.PORT || 9000)
